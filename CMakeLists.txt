@@ -40,6 +40,7 @@ include(cmake/StaticAnalyzers.cmake)
 option(ENABLE_TESTING "Enable Test Builds" ON)
 option(ENABLE_FUZZING "Enable Fuzzing Builds" OFF)
 
+if(NOT CMAKE_CROSSCOMPILING)
 # Set up some extra Conan dependencies based on our needs before loading Conan
 set(CONAN_EXTRA_REQUIRES "")
 set(CONAN_EXTRA_OPTIONS "")
@@ -57,5 +58,9 @@ if(ENABLE_FUZZING)
   message("Building Fuzz Tests, using fuzzing sanitizer https://www.llvm.org/docs/LibFuzzer.html")
   add_subdirectory(fuzz_test)
 endif()
+endif()
 
+if(CMAKE_CROSSCOMPILING)
+  add_subdirectory(target/stm32)
+endif()
 add_subdirectory(src)
